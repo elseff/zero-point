@@ -1,3 +1,4 @@
+import random
 import sys
 
 from map import *
@@ -29,6 +30,13 @@ class Game:
 
         self.scroll = [0, 0]
         self.player = Player.by_location(self, [350, 100])
+        self.objects = [[[random.randint(-200, 800)
+                          for a in range(2)] + [random.randint(50, 150) for d in range(2)]
+                         if b != 0
+                         else random.randint(10, 50) / 100
+                         for b in range(2)]
+                        for c in range(50)]
+        print(self.objects)
 
     def run(self):
         while True:
@@ -38,9 +46,21 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            self.display.fill(self.colors.BLACK)
+            self.display.fill(self.colors.WHITE)
 
             self.scroll_update()
+
+            for obj in self.objects:
+                obj_rect = pygame.Rect(obj[1][0] - self.scroll[0] * obj[0],
+                                       obj[1][1] - self.scroll[1] * obj[0],
+                                       obj[1][2],
+                                       obj[1][3])
+                surf = pygame.Surface((obj[1][2], obj[1][3]))
+                surf.set_alpha(128)
+                surf.fill((45, obj[0] * 500, 78, 0.8))
+                self.display.blit(surf, (obj[1][0] - self.scroll[0] * obj[0],
+                                       obj[1][1] - self.scroll[1] * obj[0]))
+                # pygame.draw.rect(self.display, (45, obj[0] * 500, 78, 0.5), obj_rect)
 
             self.map.render_tiles()
 
@@ -55,7 +75,6 @@ class Game:
             pygame.display.update()
             self.clock.tick(self.fps)
             self.current_fps = self.clock.get_fps()
-            print(self.current_fps)
 
     def scroll_update(self):
         self.scroll[0] += (self.player.rect.x - self.scroll[0] - self.screen_width / (

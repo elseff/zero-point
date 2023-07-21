@@ -5,11 +5,11 @@ class Map:
     def __init__(self, game):
         self.game = game
         self.game_map = self.load_map('assets/map.txt')
-        self.start_tile_pos = (0, 0)
+        self.start_tile_pos = (-500, 0)
         self.tile_width = 40
         self.tile_height = 40
         self.tile_margin = 0
-        self.tile_padding = 0
+        self.tile_padding = -500
         self.tiles = []
 
         self.init_tiles()
@@ -50,13 +50,13 @@ class Map:
                 tile_color = self.game.colors.GREEN
 
                 if tile == '1':
-                    tile_color = self.game.colors.RED
+                    tile_color = self.game.colors.BLACK
                 if tile == '2':
-                    tile_color = self.game.colors.WHITE
+                    tile_color = self.game.colors.GRAY
                 if tile_color != self.game.colors.GREEN:
                     pygame.draw.rect(self.game.display, tile_color,
                                      (self.tile_padding + (x * (self.tile_width + self.tile_margin)) - int(self.game.scroll[0]),
-                                      self.tile_padding + (y * (self.tile_height + self.tile_margin)) - int(self.game.scroll[1]),
+                                      (y * (self.tile_height + self.tile_margin)) - int(self.game.scroll[1]),
                                       self.tile_width,
                                       self.tile_height))
                 x += 1
